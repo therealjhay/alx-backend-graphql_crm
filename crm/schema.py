@@ -1,13 +1,11 @@
 import graphene
 from graphene_django import DjangoObjectType
 from graphene_django.filter import DjangoFilterConnectionField
-from crm.models import Customer, Product, Order
+from .models import Customer, Product, Order
 from .filters import CustomerFilter, ProductFilter, OrderFilter  # Import our new filters
 import re
 from decimal import Decimal
-
-
-
+from crm.models import Product
 class UpdateLowStockProducts(graphene.Mutation):
     # Output fields
     success = graphene.Boolean()
