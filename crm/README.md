@@ -11,3 +11,5 @@ This project uses Celery and Redis to handle background reporting tasks.
 2. **Python Dependencies**:
    ```bash
    pip install -r requirements.txt
+
+   setup steps
