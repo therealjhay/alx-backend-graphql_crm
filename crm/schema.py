@@ -119,10 +119,16 @@ class Mutation(graphene.ObjectType):
 
 # --- 4. QUERY (Updated for Filters) ---
 class Query(graphene.ObjectType):
-    # DjangoFilterConnectionField is the magic that connects the Filters to GraphQL
-    all_customers = DjangoFilterConnectionField(CustomerType)
-    all_products = DjangoFilterConnectionField(ProductType)
-    all_orders = DjangoFilterConnectionField(OrderType)
-
-    # Note: We do NOT need resolve methods (resolve_all_customers) anymore!
-    # DjangoFilterConnectionField handles the database query automatically.
+    # We explicitly pass filterset_class here to force the connection
+    all_customers = DjangoFilterConnectionField(
+        CustomerType, 
+        filterset_class=CustomerFilter
+    )
+    all_products = DjangoFilterConnectionField(
+        ProductType, 
+        filterset_class=ProductFilter
+    )
+    all_orders = DjangoFilterConnectionField(
+        OrderType, 
+        filterset_class=OrderFilter
+    )
