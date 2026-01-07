@@ -1,10 +1,36 @@
 import graphene
 from graphene_django import DjangoObjectType
 from graphene_django.filter import DjangoFilterConnectionField
-from .models import Customer, Product, Order
+from crm.models import Customer, Product, Order
 from .filters import CustomerFilter, ProductFilter, OrderFilter  # Import our new filters
 import re
 from decimal import Decimal
+
+
+
+class UpdateLowStockProducts(graphene.Mutation):
+    # Output fields
+    success = graphene.Boolean()
+    message = graphene.String()
+    updated_products = graphene.List(ProductType)
+
+    def mutate(self, info):
+        # 1. Query products with stock < 10
+        low_stock_items = Product.objects.filter(stock__lt=10)
+        updated_list = []
+        
+        # 2. Increment stock by 10
+        for product in low_stock_items:
+            product.stock += 10
+            product.save()
+            updated_list.append(product)
+
+        # 3. Return results
+        return UpdateLowStockProducts(
+            success=True,
+            message=f"Successfully restocked {len(updated_list)} products.",
+            updated_products=updated_list
+        )
 
 # --- 1. OUTPUT TYPES (Updated for Relay/Filtering) ---
 
